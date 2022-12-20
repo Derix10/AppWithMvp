@@ -4,27 +4,31 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.example.appwithbaha.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), CounterView {
 
     private lateinit var binding: ActivityMainBinding
-    private val presenter = Presenter()
+    private val viewModel: ActivityMainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter.attachView(this)
+        viewModel.attachView(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fromPresenter()
     }
 
+
+
     private fun fromPresenter() {
          binding.btnIncrement.setOnClickListener{
-             presenter.incrementCount()
+             viewModel.incrementCount()
          }
 
         binding.btnDecrement.setOnClickListener{
-            presenter.decrementCount()
+            viewModel.decrementCount()
         }
     }
 
@@ -37,6 +41,8 @@ class MainActivity : AppCompatActivity(), CounterView {
             Toast.makeText(this, "Поздравляем!!!", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
     override fun replaceColor(count:Int) {
         if(count == 15) {

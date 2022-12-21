@@ -1,55 +1,37 @@
 package com.example.appwithbaha
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.appwithbaha.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), CounterView {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: ActivityMainViewModel by viewModels()
+    private lateinit var viewModel: ActivityMainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.attachView(this)
+        viewModel = ViewModelProvider(this)[ActivityMainViewModel::class.java]
+        viewModel.init()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel.getCount()?.observe(this
+        ) { t -> binding.tvCount.text = t?.getCount().toString() }
         fromPresenter()
     }
 
 
-
     private fun fromPresenter() {
-         binding.btnIncrement.setOnClickListener{
-             viewModel.incrementCount()
-         }
-
         binding.btnDecrement.setOnClickListener{
             viewModel.decrementCount()
         }
-    }
-
-    override fun updateCounter(count: Int) {
-        binding.tvCount.text = count.toString()
-    }
-
-    override fun toast(count:Int) {
-        if(count == 10){
-            Toast.makeText(this, "Поздравляем!!!", Toast.LENGTH_SHORT).show()
+        binding.btnIncrement.setOnClickListener{
+            viewModel.incrementCount()
         }
     }
 
 
 
-    override fun replaceColor(count:Int) {
-        if(count == 15) {
-            binding.tvCount.setTextColor(Color.RED)
-        }else{
-            binding.tvCount.setTextColor(Color.BLACK)
-        }
-    }
 
 }

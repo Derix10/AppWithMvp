@@ -18,11 +18,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel.getCount()?.observe(this
         ) { t -> binding.tvCount.text = t?.getCount().toString() }
-        fromPresenter()
+        fromViewModel()
     }
 
 
-    private fun fromPresenter() {
+    private fun fromViewModel() {
         binding.btnDecrement.setOnClickListener{
             viewModel.decrementCount()
         }
